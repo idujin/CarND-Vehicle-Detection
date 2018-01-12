@@ -77,7 +77,13 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap. I then assumed each blob corresponded to a vehicle. I constructed bounding boxes to cover the area of each blob detected.  
+I recorded the positions of positive detections in each frame of the video. 
+The first method I tried is as below. 
+From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap. I then assumed each blob corresponded to a vehicle. I constructed bounding boxes to cover the area of each blob detected. However, the above simple method could not be successfully applied to all frames because of false positives.
+To reject false positives, I tried three additional strategies. First, I tried frame averaging on heatmap. At the same time, I collected a vehicle detection box in the same frames used in heatmap averaging for a later step. Second, after constructing bounding box using the averaged heatmap, I calculated the center and standard deviation of the detection box inside each bounding box. From the collected detection box, a new list of detection boxes was created by removing the box with a calculated standard deviation of the collected detection boxes greater than a certain value and a greater distance from the center of the vehicle detection box. Lastly, I calculated the heatmap from the newly created list of detection boxes and got the vehicle detection box.
+
+
+
 
 Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
 
@@ -99,5 +105,6 @@ Here's an example result showing the heatmap from a series of frames of video, t
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+
+The major issue to implement my classifier is to detect false positives. Most false positives appeared in front-facing vehicles. However, since the front and rear of the vehicle were not separated and trained, I tried to eliminate false positives using appropriate thresholds and the tendency of each frame. After applying the additional method, the final video presented above was obtained.
 
