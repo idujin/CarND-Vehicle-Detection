@@ -81,7 +81,9 @@ From the positive detections I created a heatmap and then thresholded that map t
 To reject false positives, I tried three additional strategies. 
 
 *heat map averaging
+
 *standard deviation of the center of detection boxes
+
 *center distance of previous and current bounding box
 
 First, I tried frame averaging on heatmap. At the same time, I collected a vehicle detection box in the same frames used in heatmap averaging for a later step. Second, after constructing bounding box using the averaged heatmap, I calculated the center and standard deviation of the detection box inside each bounding box. From the collected detection box, a new list of detection boxes was created by removing the box with a calculated standard deviation of the collected detection boxes greater than a certain value and a greater distance from the center of the vehicle detection box. Lastly, I calculated the heatmap from the newly created list of detection boxes and got the vehicle detection box.
