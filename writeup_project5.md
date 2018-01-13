@@ -70,7 +70,7 @@ Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spat
 
 ### Video Implementation
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./result_project_video.mp4)
 
 
 ### False Positive Rejection
