@@ -1,3 +1,4 @@
+
 ---
 
 **Vehicle Detection Project**
@@ -12,12 +13,12 @@ The goals / steps of this project are the following:
 * Estimate a bounding box for vehicles detected.
 
 [//]: # (Image References)
-[car_not_car_image]: ./examples/car_not_car.png
-[HOG_image]: ./examples/HOG_example.png
-[sliding_window_image]: ./examples/sliding_window.png
-[output_bboxes_image]: ./examples/output_bboxes.png
-[FP_reject_image5]: ./examples/false_postive_rejection.png
-[video1]: ./result_project_video.mp4
+[car_not_car_image]: ./examples/car_not_car.png "Car and not car examples"
+[HOG_image]: ./examples/HOG_example.png "HOG example"
+[sliding_window_image]: ./examples/sliding_window.png "Sliding window example"
+[output_bboxes_image]: ./examples/output_bboxes.png "Output example"
+[FP_reject_image5]: ./examples/false_postive_rejection.png "False positive rejection"
+[video1]: ./result_project_video.mp4 "Result video"
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
