@@ -16,9 +16,7 @@ The goals / steps of this project are the following:
 [HOG_image]: ./examples/HOG_example.png
 [sliding_window_image]: ./examples/sliding_window.png
 [output_bboxes_image]: ./examples/output_bboxes.png
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
+[FP_reject_image5]: ./examples/false_postive_rejection.png
 [video1]: ./result_project_video.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points
@@ -71,40 +69,29 @@ Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spat
 
 ### Video Implementation
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
 Here's a [link to my video result](./project_video.mp4)
 
 
-#### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
+### False Positive Rejection
 
 I recorded the positions of positive detections in each frame of the video. 
 The first method I tried is as below. 
 From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap. I then assumed each blob corresponded to a vehicle. I constructed bounding boxes to cover the area of each blob detected. However, the above simple method could not be successfully applied to all frames because of false positives.
-To reject false positives, I tried three additional strategies. First, I tried frame averaging on heatmap. At the same time, I collected a vehicle detection box in the same frames used in heatmap averaging for a later step. Second, after constructing bounding box using the averaged heatmap, I calculated the center and standard deviation of the detection box inside each bounding box. From the collected detection box, a new list of detection boxes was created by removing the box with a calculated standard deviation of the collected detection boxes greater than a certain value and a greater distance from the center of the vehicle detection box. Lastly, I calculated the heatmap from the newly created list of detection boxes and got the vehicle detection box.
+To reject false positives, I tried three additional strategies. 
 
+*heat map averaging
+*standard deviation of the center of detection boxes
+*center distance of previous and current bounding box
 
+First, I tried frame averaging on heatmap. At the same time, I collected a vehicle detection box in the same frames used in heatmap averaging for a later step. Second, after constructing bounding box using the averaged heatmap, I calculated the center and standard deviation of the detection box inside each bounding box. From the collected detection box, a new list of detection boxes was created by removing the box with a calculated standard deviation of the collected detection boxes greater than a certain value and a greater distance from the center of the vehicle detection box. Lastly, I calculated the heatmap from the newly created list of detection boxes and got the vehicle detection box.
 
+The following is an example of rejecting false positives in a heat map.
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
-
-### Here are six frames and their corresponding heatmaps:
-
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
-
-
+![alt text][FP_reject_image5]
 
 ---
 
 ### Discussion
 
-#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
-
-
-The major issue to implement my classifier is to detect false positives. Most false positives appeared in front-facing vehicles. However, since the front and rear of the vehicle were not separated and trained, I tried to eliminate false positives using appropriate thresholds and the tendency of each frame. After applying the additional method, the final video presented above was obtained.
+The major issue to implement my classifier is to detect false positives. Most false positives appeared in front-facing vehicles. However, since the front and rear of the vehicle were not separated and trained, I tried to eliminate false positives using appropriate thresholds and the tendency of each frame. After applying the additional method, the final video presented above was obtained. Although few false positives still remain, I think false positives can be reduced if better classifiers or well-classified front and rear vehicle training data are given.
 
